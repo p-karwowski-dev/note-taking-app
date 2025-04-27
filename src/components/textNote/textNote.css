@@ -1,0 +1,15 @@
+.Text-note {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  overflow-y: auto;
+  height: 100px;
+  max-height: 300px;
+  width: 600px;
+  resize: vertical;
+  text-align: left;
+}
