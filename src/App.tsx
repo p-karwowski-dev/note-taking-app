@@ -1,6 +1,6 @@
 import './App.css'
 import { AddNoteButton } from './components/addNoteButton/AddNoteButton'
-import { NoteList } from './noteList/NoteList'
+import { NoteList } from './components/noteList/NoteList'
 
 function App() {
   return (

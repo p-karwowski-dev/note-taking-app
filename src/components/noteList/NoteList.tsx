@@ -1,5 +1,5 @@
 import './noteList.css'
-import { TextNote } from '../components/textNote/TextNote'
+import { TextNote } from '../textNote/TextNote'
 
 export function NoteList() {
   const onStopTyping = (text: string) => {
