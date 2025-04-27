@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "NTA",
+  "name": "Note Taking App",
+  "description": "A simple note-taking application built with React.",
   "icons": [
     {
       "src": "favicon.ico",
