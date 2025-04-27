@@ -1,0 +1,24 @@
+.Add-note-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 300px;
+}
+
+.Add-note-button:hover {
+  background-color: #45a049;
+}
+
+.Add-note-button:active {
+  background-color: #3e8e41;
+}
+
+.Add-note-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px #4caf50;
+}
