@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import { getNotes } from './endpoints'
-import { Note, UseFetchReturnProps } from './api.types'
+import { Note, useGetNotesReturnProps } from './api.types'
 
-export function useGetNotes(): UseFetchReturnProps {
-  const refReq = useRef(false)
+export function useGetNotes(): useGetNotesReturnProps {
+  const [counter, update] = useState(0)
+  const refRequest = useRef(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [data, setData] = useState<Note[] | undefined>(undefined)
+  const [notes, setNotes] = useState<Note[] | undefined>(undefined)
 
   useEffect(() => {
     const fetchNotes = async () => {
       setIsLoading(true)
       try {
         const response = await getNotes()
-        setData(response)
+        setNotes(response)
       } catch (error) {
         console.error('Error on useGetNotes:', error)
         setIsError(true)
@@ -22,15 +23,23 @@ export function useGetNotes(): UseFetchReturnProps {
       }
     }
 
-    if (!refReq.current) {
+    if (!refRequest.current) {
       fetchNotes()
-      refReq.current = true
+      refRequest.current = true
     }
-  }, [isLoading, data])
+  }, [isLoading, notes, counter])
+
+  const refetchNotes = () => {
+    refRequest.current = false
+    setIsError(false)
+    setIsLoading(false)
+    update((prev) => prev + 1)
+  }
 
   return {
     isLoading,
     isError,
-    data,
+    notes,
+    refetchNotes,
   }
 }

@@ -1,23 +1,21 @@
 import './App.css'
-import { useState } from 'react'
 import { useGetNotes } from './api/hooks'
 import { addNote } from './api/appRequests'
 import { AddNoteButton } from './components/addNoteButton/AddNoteButton'
 import { SyncTextNote } from './components/textNote/SyncTextNote'
+import { useMemo } from 'react'
 
 function App() {
-  const { isLoading, isError, data: notes } = useGetNotes()
-  const [notesList, setNotesList] = useState(notes ?? [])
+  const { isLoading, isError, notes, refetchNotes } = useGetNotes()
+  const reverseNotes = useMemo(() => notes?.slice(0).reverse(), [notes])
 
   const addNoteHandler = async () => {
     const newNote = await addNote({
-      id: notesList.length + 1,
+      id: notes?.length ? notes.length + 1 : 1,
       body: 'Your new note...',
     })
 
-    if (newNote) {
-      setNotesList((prevNotes) => [...prevNotes, newNote])
-    }
+    if (newNote) refetchNotes()
   }
 
   return (
@@ -38,7 +36,9 @@ function App() {
       {isError && <p>Error loading notes</p>}
 
       <main className="Note-list">
-        {notes?.map((note) => <SyncTextNote key={note.id} note={note} />)}
+        {reverseNotes?.map((note) => (
+          <SyncTextNote key={note.id} note={note} />
+        ))}
       </main>
     </div>
   )

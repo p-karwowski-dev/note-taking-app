@@ -11,8 +11,9 @@ export type Note = {
   body: string
 }
 
-export interface UseFetchReturnProps {
+export interface useGetNotesReturnProps {
   isLoading: boolean
   isError: boolean
-  data: Note[] | undefined
+  notes: Note[] | undefined
+  refetchNotes: () => void
 }

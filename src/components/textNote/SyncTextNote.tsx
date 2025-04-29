@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import { Note } from '../../api/api.types'
 import { TextNote } from './TextNote'
+import { updateNote } from '../../api/appRequests'
+import { Note } from '../../api/api.types'
 
 export const SyncTextNote = ({ note }: { note: Note }) => {
-  const [syncNote, setSyncNote] = useState(note)
-  console.log(note)
-
-  const onStopTyping = (text: string) => {
-    console.log(text)
+  const onStopTyping = async (text: string) => {
+    await updateNote({
+      id: note.id,
+      body: text,
+    })
   }
 
-  return <TextNote text={syncNote.body} onStopTyping={onStopTyping} />
+  return <TextNote text={note.body} onStopTyping={onStopTyping} />
 }
