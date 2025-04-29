@@ -1,5 +1,9 @@
 import './addNoteButton.css'
 
-export function AddNoteButton() {
-  return <button className="Add-note-button">Add Note</button>
+export function AddNoteButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button onClick={onClick} className="Add-note-button">
+      Add Note
+    </button>
+  )
 }
