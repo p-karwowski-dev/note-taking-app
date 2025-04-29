@@ -4,11 +4,9 @@ export const appBaseFetch = async <T>({
   method = 'GET',
   url,
   body,
-  controller,
   headers,
 }: BaseFetch): Promise<T> => {
   const response = await fetch(url, {
-    signal: controller?.signal,
     method,
     body,
     headers: {
@@ -19,6 +17,8 @@ export const appBaseFetch = async <T>({
 
   if (!response.ok) {
     switch (response.status) {
+      case 400:
+        throw new Error('Error 400: Invalid request.')
       case 401:
         throw new Error('Error 401: Unauthorized access. Please log in.')
       case 403:

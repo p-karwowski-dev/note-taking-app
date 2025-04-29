@@ -1,14 +1,14 @@
 import { Note } from './api.types'
 import { appFetch } from './appFetch'
 
-export const postNotes = async (notes: string[]) =>
-  appFetch<Note[]>('/notes', {
+export const postNote = async (note: Note) =>
+  appFetch<Note>('/notes', {
     method: 'POST',
-    body: JSON.stringify(notes),
+    body: JSON.stringify(note),
   })
 
-export const putNote = async (note: string, noteId: string) =>
-  appFetch<Note[]>(`/notes/${noteId}`, {
+export const putNote = async (note: Note) =>
+  appFetch<Note>(`/notes/${note.id}`, {
     method: 'PUT',
     body: JSON.stringify(note),
   })

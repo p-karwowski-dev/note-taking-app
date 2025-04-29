@@ -7,12 +7,12 @@ export interface BaseFetch {
 }
 
 export type Note = {
-  id: string
+  id: number
   body: string
 }
 
 export interface UseFetchReturnProps {
   isLoading: boolean
   isError: boolean
-  data: Note[]
+  data: Note[] | undefined
 }
