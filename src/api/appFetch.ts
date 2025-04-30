@@ -4,7 +4,7 @@ import { appBaseFetch } from './appBaseFetch'
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 const API_SESSION = process.env.REACT_APP_API_SESSION
 
-export const appFetch = async <T>(
+export const appFetchWithEnv = async <T>(
   endpoint: string,
   options?: Omit<BaseFetch, 'url'>
 ): Promise<T> => {
