@@ -37,3 +37,40 @@ function purifyHTML(node: Node): string {
 
   return textContent
 }
+
+/**
+ * Get the list of items that match the text after the '@' sign.
+ * The function will return a maximum of `maxReturn` items.
+ * If no text is provided, it will return the first 5 items from the list.
+ * If the text contains letter after a space after the '@' sign, it will return an empty array.
+ * @param text - The text to search in.
+ * @param list - The list of items to search from.
+ * @param maxReturn - The maximum number of items to return.
+ * @returns An array of matching items.
+ */
+export function getMatchingItems(
+  text: string,
+  list: string[],
+  sign = '@',
+  maxReturn = 5
+): string[] {
+  if (!text.length) return list.slice(0, 5)
+
+  const atIndex = text.indexOf(sign)
+  const afterSign = text.slice(atIndex + 1)
+  const textParts = afterSign.split(' ')
+
+  if (textParts[1]) {
+    return []
+  }
+
+  const matched = []
+  let index = 0
+  while (matched.length < maxReturn && index < list.length) {
+    if (list[index]?.toLowerCase()?.includes(textParts[0].toLowerCase())) {
+      matched.push(list[index])
+    }
+    index++
+  }
+  return matched
+}
