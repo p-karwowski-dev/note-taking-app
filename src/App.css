@@ -7,6 +7,7 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  position: relative;
 }
 
 .App-header {
@@ -29,4 +30,26 @@
   overflow-y: auto;
   padding: 16px;
   gap: 8px;
+}
+
+.User-tooltip {
+  position: absolute;
+  background-color: rgb(185, 184, 184);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  pointer-events: none;
+  width: 120px;
+  height: auto;
+  transition: opacity 0.3s ease-in-out;
+  overflow: hidden;
+  text-align: left;
+  display: none;
+  border: 1px solid #acabab;
+
+  p {
+    margin: 5px;
+    padding: 0;
+  }
 }

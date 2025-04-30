@@ -1,5 +1,6 @@
 /**
  * Ensure that the text is safe to be displayed in the UI.
+ * This function will decode HTML entities and remove any non-text elements.
  */
 export const sanitizeText = (text: string): string => {
   if (!text) return ''
@@ -36,6 +37,59 @@ function purifyHTML(node: Node): string {
   })
 
   return textContent
+}
+
+export const updateTooltipHtml = (
+  text: string | undefined,
+  list: string[] = []
+) => {
+  const tooltip = document.getElementById('tooltip')
+  if (!tooltip) return
+
+  if (!text?.includes('@')) {
+    if (tooltip.style.display === 'block') {
+      tooltip.style.display = 'none'
+    }
+    return
+  }
+
+  const matchUsers = getMatchingItems(text, list)
+
+  if (!matchUsers.length) {
+    tooltip.style.display = 'none'
+    return
+  }
+
+  tooltip.innerHTML = ''
+  matchUsers.forEach((user) => {
+    const userElement = document.createElement('p')
+    userElement.innerHTML = user
+    tooltip.appendChild(userElement)
+  })
+
+  const { top = 0, left = 0 } = getCaretCoords()
+  tooltip.style.top = `${top + 25}px`
+  tooltip.style.left = `${left - 60}px`
+  tooltip.style.display = 'block'
+}
+
+/**
+ * Get the coordinates of the caret position in the text area.
+ */
+function getCaretCoords(): Partial<{ top: number; left: number }> {
+  const selection = window.getSelection()
+  if (!selection?.rangeCount) return {}
+
+  const range = selection.getRangeAt(0).cloneRange()
+  range.collapse(true)
+
+  const rect = range.getClientRects()[0]
+  if (!rect) return {}
+
+  return {
+    top: rect.top + window.scrollY,
+    left: rect.left + window.scrollX,
+  }
 }
 
 /**

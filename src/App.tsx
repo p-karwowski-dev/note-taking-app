@@ -6,8 +6,14 @@ import { SyncTextNote } from './components/textNote/SyncTextNote'
 import { useMemo } from 'react'
 
 function App() {
-  const { isLoading, isError, notes, refetchNotes } = useGetNotes()
+  const {
+    isLoading,
+    isError,
+    notes = [{ id: 0, body: 'test' }],
+    refetchNotes,
+  } = useGetNotes()
   const reverseNotes = useMemo(() => notes?.slice(0).reverse(), [notes])
+  const userNames = ['user1']
 
   const addNoteHandler = async () => {
     const newNote = await addNote({
@@ -37,9 +43,10 @@ function App() {
 
       <main className="Note-list">
         {reverseNotes?.map((note) => (
-          <SyncTextNote key={note.id} note={note} />
+          <SyncTextNote key={note.id} note={note} userNames={userNames} />
         ))}
       </main>
+      <div className="User-tooltip" id="tooltip"></div>
     </div>
   )
 }

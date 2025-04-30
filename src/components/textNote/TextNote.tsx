@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react'
 import './textNote.css'
-import { sanitizeText } from './utils'
+import { sanitizeText, updateTooltipHtml } from './utils'
 
-interface componentProps {
+interface TextNoteProps {
   text: string
+  userNames?: string[]
   onStopTyping: (text: string) => void
 }
 
-export function TextNote({ text, onStopTyping }: componentProps) {
+export const TextNote = ({ text, onStopTyping, userNames }: TextNoteProps) => {
   const noteRef = useRef<HTMLDivElement>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -41,8 +42,11 @@ export function TextNote({ text, onStopTyping }: componentProps) {
       onInput={() => {
         clearTimeOutRef()
         setTimeoutRef()
+        updateTooltipHtml(noteRef?.current?.innerText, userNames)
       }}
-      dangerouslySetInnerHTML={{ __html: text }}
+      dangerouslySetInnerHTML={{
+        __html: noteRef?.current?.innerHTML || text,
+      }}
     ></div>
   )
 }
