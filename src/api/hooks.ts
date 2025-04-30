@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { getNotes } from './endpoints'
-import { Note, useGetNotesReturnProps } from './api.types'
+import { Note, useGetNotesReturnProps, User } from './api.types'
+import { pullUserList } from './appRequests'
 
 export function useGetNotes(): useGetNotesReturnProps {
   const [counter, update] = useState(0)
@@ -42,4 +43,32 @@ export function useGetNotes(): useGetNotesReturnProps {
     notes,
     refetchNotes,
   }
+}
+
+export function useGetUserList() {
+  const refRequest = useRef(false)
+  const [userList, setUserList] = useState<User[] | undefined>(undefined)
+
+  const userNames = useMemo(
+    () => userList?.map(({ first_name }) => first_name) ?? [],
+    [userList]
+  )
+
+  useEffect(() => {
+    const fetchUserList = async () => {
+      try {
+        const response = await pullUserList()
+        setUserList(response)
+      } catch (error) {
+        console.error('Error on useGetUserList:', error)
+      }
+    }
+
+    if (!refRequest.current) {
+      fetchUserList()
+      refRequest.current = true
+    }
+  }, [])
+
+  return { userNames }
 }

@@ -1,5 +1,5 @@
 import './App.css'
-import { useGetNotes } from './api/hooks'
+import { useGetNotes, useGetUserList } from './api/hooks'
 import { addNote } from './api/appRequests'
 import { AddNoteButton } from './components/addNoteButton/AddNoteButton'
 import { SyncTextNote } from './components/textNote/SyncTextNote'
@@ -13,7 +13,7 @@ function App() {
     refetchNotes,
   } = useGetNotes()
   const reverseNotes = useMemo(() => notes?.slice(0).reverse(), [notes])
-  const userNames = ['user1']
+  const { userNames } = useGetUserList()
 
   const addNoteHandler = async () => {
     const newNote = await addNote({

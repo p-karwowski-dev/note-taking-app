@@ -1,5 +1,5 @@
-import { Note } from './api.types'
-import { appFetch } from './appFetch'
+import { Note, User } from './api.types'
+import { appFetch, appFetchWithUrl } from './appFetch'
 
 export const postNote = async (note: Note) =>
   appFetch<Note>('/notes', {
@@ -22,3 +22,5 @@ export const getNote = async (noteId: string) =>
   appFetch<Note>(`/notes/${noteId}`, {
     method: 'GET',
   })
+
+export const getUserList = async () => appFetchWithUrl<User[]>('/users')
