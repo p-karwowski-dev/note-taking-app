@@ -6,12 +6,10 @@ Application allows create, edit, and save note. Notes are saved automatically af
 
 With more time dedicated to the task, I would address the improvements listed below.
 
-- improvement of name pattern recognition to handle multiple signs "@" in note
-- capturing pointer position in note and sync with pattern recognition to improve UX
 - allowing to select user name from tooltip
 - improving apiRequest, try to convert to generic method
 - adding global state to prepare for scaling
-- adding regression test
+- adding regression test for mention feature
 
 ## Available Scripts
 
