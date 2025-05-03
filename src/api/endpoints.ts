@@ -1,4 +1,4 @@
-import { Note, User } from './api.types'
+import { Note, User } from '../app.types'
 import { appFetchWithEnv, appFetchWithUrl } from './appFetch'
 
 export const postNote = async (note: Note) =>

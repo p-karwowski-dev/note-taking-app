@@ -1,4 +1,4 @@
-import { BaseFetch } from './api.types'
+import { BaseFetch } from '../app.types'
 import { appBaseFetch } from './appBaseFetch'
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL

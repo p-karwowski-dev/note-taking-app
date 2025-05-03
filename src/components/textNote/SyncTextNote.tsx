@@ -1,6 +1,6 @@
 import { TextNote } from './TextNote'
 import { updateNote } from '../../api/appRequests'
-import { Note } from '../../api/api.types'
+import { Note } from '../../app.types'
 
 export const SyncTextNote = ({
   note,

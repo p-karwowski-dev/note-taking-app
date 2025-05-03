@@ -15,6 +15,10 @@ With more time dedicated to the task, I would address the improvements listed be
 
 In the project directory, you can run:
 
+#### `npm install`
+
+Then .env file is part of the repo so no need to create it.
+
 #### `npm start`
 
 Runs the app in the development mode.\

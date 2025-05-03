@@ -1,4 +1,4 @@
-import { Note } from './api.types'
+import { Note } from '../app.types'
 import { getUserList, postNote, putNote } from './endpoints'
 
 export const addNote = async (note: Note) => {

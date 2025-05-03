@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { getNotes } from './endpoints'
-import { Note, useGetNotesReturnProps, User } from './api.types'
+import { Note, useGetNotesReturnProps, User } from '../app.types'
 import { pullUserList } from './appRequests'
 
 export function useGetNotes(): useGetNotesReturnProps {

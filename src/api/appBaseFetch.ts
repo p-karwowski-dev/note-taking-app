@@ -1,4 +1,4 @@
-import { BaseFetch } from './api.types'
+import { BaseFetch } from '../app.types'
 
 export const appBaseFetch = async <T>({
   method = 'GET',

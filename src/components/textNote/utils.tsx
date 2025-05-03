@@ -1,4 +1,4 @@
-import { DomRecList, TextRef } from '../../api/api.types'
+import { DomRecList, TextRef } from '../../app.types'
 
 /**
  * Ensure that the text is safe to be displayed in the UI.
