@@ -34,3 +34,12 @@ export interface User {
   title: string
   username: string
 }
+
+export interface tooltipPosition {
+  top: number
+  left: number
+}
+
+export type DomRecList = React.RefObject<DOMRectList | null>
+
+export type TextRef = React.RefObject<string | null>

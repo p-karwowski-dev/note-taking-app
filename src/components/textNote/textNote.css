@@ -12,4 +12,9 @@
   width: 600px;
   resize: vertical;
   text-align: left;
+  white-space: pre;
+
+  span {
+    color: #007bff;
+  }
 }

@@ -1,12 +1,18 @@
 import { TextNote } from './TextNote'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import * as utils from './utils'
+
+jest.mock('./utils')
 
 describe('TextNote', () => {
   const initialText = 'Test'
   const mockOnStopTyping = jest.fn()
 
   beforeEach(() => {
+    jest.spyOn(utils, 'wrapText').mockImplementation((text) => text)
+    jest.spyOn(utils, 'updateText').mockImplementation(() => null)
+    jest.spyOn(utils, 'updateTooltipHtml').mockImplementation(() => null)
     render(<TextNote text={initialText} onStopTyping={mockOnStopTyping} />)
   })
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import './textNote.css'
-import { sanitizeText, updateTooltipHtml } from './utils'
+import { updateText, sanitizeText, updateTooltipHtml, wrapText } from './utils'
+import { flushSync } from 'react-dom'
 
 interface TextNoteProps {
   text: string
@@ -11,6 +12,8 @@ interface TextNoteProps {
 export const TextNote = ({ text, onStopTyping, userNames }: TextNoteProps) => {
   const noteRef = useRef<HTMLDivElement>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const rangeRef = useRef<DOMRectList | null>(null)
+  const tooltipTextRef = useRef<string | null>(null)
 
   const clearTimeOutRef = () => {
     if (timeoutRef.current) {
@@ -40,12 +43,15 @@ export const TextNote = ({ text, onStopTyping, userNames }: TextNoteProps) => {
       className="Text-note"
       contentEditable
       onInput={() => {
+        flushSync(() => {
+          updateText(rangeRef, tooltipTextRef)
+          updateTooltipHtml(rangeRef, tooltipTextRef, userNames)
+        })
         clearTimeOutRef()
         setTimeoutRef()
-        updateTooltipHtml(noteRef?.current?.innerText, userNames)
       }}
       dangerouslySetInnerHTML={{
-        __html: noteRef?.current?.innerHTML || text,
+        __html: wrapText(text),
       }}
     ></div>
   )

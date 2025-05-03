@@ -1,3 +1,5 @@
+import { DomRecList, TextRef } from '../../api/api.types'
+
 /**
  * Ensure that the text is safe to be displayed in the UI.
  * This function will decode HTML entities and remove any non-text elements.
@@ -9,7 +11,6 @@ export const sanitizeText = (text: string): string => {
   const decodedText = decodeHTML(text)
   const doc = parser.parseFromString(decodedText, 'text/html')
   const pureText = purifyHTML(doc)
-
   return pureText
 }
 
@@ -40,16 +41,17 @@ function purifyHTML(node: Node): string {
 }
 
 export const updateTooltipHtml = (
-  text: string | undefined,
+  domRecList: DomRecList,
+  textRef: TextRef,
   list: string[] = []
 ) => {
   const tooltip = document.getElementById('tooltip')
+  const text = textRef.current
+
   if (!tooltip) return
 
   if (!text?.includes('@')) {
-    if (tooltip.style.display === 'block') {
-      tooltip.style.display = 'none'
-    }
+    tooltip.style.display = 'none'
     return
   }
 
@@ -60,14 +62,14 @@ export const updateTooltipHtml = (
     return
   }
 
-  tooltip.innerHTML = ''
+  tooltip.textContent = ''
   matchUsers.forEach((user) => {
     const userElement = document.createElement('p')
-    userElement.innerHTML = user
+    userElement.textContent = user
     tooltip.appendChild(userElement)
   })
 
-  const { top = 0, left = 0 } = getCaretCoords()
+  const { top = 0, left = 0 } = getCaretCoords(domRecList)
   tooltip.style.top = `${top + 25}px`
   tooltip.style.left = `${left - 60}px`
   tooltip.style.display = 'block'
@@ -76,19 +78,14 @@ export const updateTooltipHtml = (
 /**
  * Get the coordinates of the caret position in the text area.
  */
-function getCaretCoords(): Partial<{ top: number; left: number }> {
-  const selection = window.getSelection()
-  if (!selection?.rangeCount) return {}
-
-  const range = selection.getRangeAt(0).cloneRange()
-  range.collapse(true)
-
-  const rect = range.getClientRects()[0]
-  if (!rect) return {}
+function getCaretCoords(
+  domRecList: React.RefObject<DOMRectList | null>
+): Partial<{ top: number; left: number }> {
+  const rec = domRecList.current?.[0]
 
   return {
-    top: rect.top + window.scrollY,
-    left: rect.left + window.scrollX,
+    top: rec ? rec.top + window.scrollY : 0,
+    left: rec ? rec.left + window.scrollX : 0,
   }
 }
 
@@ -127,4 +124,67 @@ export function getMatchingItems(
     index++
   }
   return matched
+}
+
+export const wrapText = (text: string): string =>
+  text.replace(/(@\w+)/g, '<span>$1</span>')
+
+export const updateText = (rangeRef: DomRecList, textRef: TextRef) => {
+  const selection = window.getSelection()
+  const range = selection?.getRangeAt(0).cloneRange()
+  const paragraph = range?.endContainer
+  rangeRef.current = range?.getClientRects() ?? null
+
+  if (paragraph && !(paragraph instanceof Text)) {
+    textRef.current = ''
+  }
+
+  if (!range || !(paragraph instanceof Text)) return
+
+  let targetElement: HTMLElement | Text | undefined
+  const currentIndex = range?.endOffset
+  const lastTypedChar = paragraph.textContent?.charAt(currentIndex - 1)
+
+  if (lastTypedChar) {
+    if (lastTypedChar === '@') {
+      const parentElement = paragraph.parentNode
+      const text = paragraph.splitText(currentIndex - 1)
+      const mark = document.createElement('span')
+      mark.textContent = '@'
+
+      text.deleteData(0, 1)
+      parentElement?.insertBefore(mark, text)
+      targetElement = mark
+    } else {
+      if (paragraph.textContent?.includes('@')) {
+        if (currentIndex == paragraph.textContent.indexOf('@')) {
+          const spanElement = paragraph.parentNode
+          const parentSpanElement = spanElement?.parentNode
+          paragraph.deleteData(0, 1)
+          const lastText = document.createTextNode(lastTypedChar)
+          parentSpanElement?.insertBefore(lastText, spanElement)
+        } else if (!lastTypedChar?.trim() || /[^\w\s]/.test(lastTypedChar)) {
+          const spanElement = paragraph.parentNode
+          const textEnd = paragraph.splitText(currentIndex - 1)
+          spanElement?.removeChild(textEnd)
+          spanElement?.parentElement?.insertBefore(
+            textEnd,
+            spanElement.nextSibling
+          )
+          targetElement = textEnd
+        }
+      }
+    }
+  }
+
+  if (targetElement) {
+    range.setStart(targetElement, 1)
+    range.collapse(true)
+    selection?.removeAllRanges()
+    selection?.addRange(range)
+  }
+
+  textRef.current = targetElement
+    ? targetElement.textContent
+    : paragraph.textContent || ''
 }

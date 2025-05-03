@@ -1,4 +1,4 @@
-import { getMatchingItems, sanitizeText } from './utils'
+import { getMatchingItems, sanitizeText, wrapText } from './utils'
 
 describe('sanitizeText', () => {
   it('should return an empty string if input is null or undefined or empty string', () => {
@@ -68,5 +68,25 @@ describe('getMatchingItems', () => {
   it('should return an empty array when the list is empty', () => {
     const text = 'Hello @user1'
     expect(getMatchingItems(text, [])).toEqual([])
+  })
+})
+
+describe('wrapText', () => {
+  it('should wrap text with @ in span tags', () => {
+    const input = 'Hello @user1, how are you?'
+    const expectedOutput = 'Hello <span>@user1</span>, how are you?'
+    expect(wrapText(input)).toBe(expectedOutput)
+  })
+
+  it('should not modify text without @', () => {
+    const input = 'Hello user1, how are you?'
+    expect(wrapText(input)).toBe(input)
+  })
+
+  it('should handle multiple @ mentions', () => {
+    const input = '@user1 and @user2 are here'
+    const expectedOutput =
+      '<span>@user1</span> and <span>@user2</span> are here'
+    expect(wrapText(input)).toBe(expectedOutput)
   })
 })

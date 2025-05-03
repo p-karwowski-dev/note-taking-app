@@ -6,12 +6,7 @@ import { SyncTextNote } from './components/textNote/SyncTextNote'
 import { useMemo } from 'react'
 
 function App() {
-  const {
-    isLoading,
-    isError,
-    notes = [{ id: 0, body: 'test' }],
-    refetchNotes,
-  } = useGetNotes()
+  const { isLoading, isError, notes, refetchNotes } = useGetNotes()
   const reverseNotes = useMemo(() => notes?.slice(0).reverse(), [notes])
   const { userNames } = useGetUserList()
 
